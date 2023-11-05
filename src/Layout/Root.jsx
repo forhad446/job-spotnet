@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import logo from './../assets/img/logo2.png'
 import Link from "../Shared/Link";
+import Footer from "../components/Footer";
 
 const Root = () => {
     return (
@@ -32,6 +33,10 @@ const Root = () => {
                     </div>
                     {/* Page content here */}
                     <Outlet></Outlet>
+                    {/* footer */}
+                    <div className="mt-10">
+                        <Footer />
+                    </div>
                 </div>
                 <div className="drawer-side">
                     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
