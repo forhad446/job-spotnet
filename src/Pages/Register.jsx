@@ -1,12 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import logo from './../assets/img/logo.png'
 import { useContext, useState } from 'react';
 import { AuthContext } from '../Provider/AuthProvider';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Register = () => {
 
-    const { createUser } = useContext(AuthContext);
+    const { user, createUser } = useContext(AuthContext);
     const [signUpError, setSignUpError] = useState('');
+    const notify = () => toast(signUpError);
 
     const handleRegister = event => {
         event.preventDefault();
@@ -48,6 +50,9 @@ const Register = () => {
     }
     return (
         <div>
+            {
+                user?.email && <Navigate to='/'></Navigate>
+            }
             <section className="bg-gray-50 ">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 ">
@@ -86,11 +91,21 @@ const Register = () => {
                                         <label className="font-light text-gray-500 ">I accept the <a className="font-medium text-green-600 hover:underline " href="#">Terms and Conditions</a></label>
                                     </div>
                                 </div>
-                                <button type="submit" className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Register</button>
+                                <button onClick={notify} type="submit" className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Register</button>
                                 <p className="text-sm font-light text-gray-500">
                                     Already have an account? <Link to='/login' className="font-medium text-primary-600 hover:underline ">Login here</Link>
                                 </p>
                             </form>
+                            <Toaster
+                                toastOptions={{
+                                    className: '',
+                                    style: {
+                                        border: '1px solid #713200',
+                                        padding: '16px',
+                                        color: '#713200',
+                                    },
+                                }}
+                            />
                         </div>
                     </div>
                 </div>

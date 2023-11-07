@@ -1,13 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import logo from './../assets/img/logo.png'
 import { BsGoogle } from 'react-icons/Bs';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../Provider/AuthProvider';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Login = () => {
 
-    const { signInUser, googleSignIn } = useContext(AuthContext);
+    const { user, signInUser, googleSignIn } = useContext(AuthContext);
     const [signInError, setSignInError] = useState('');
+    const notify = () => toast(signInError);
 
     const handleLogin = event => {
         event.preventDefault();
@@ -20,24 +22,32 @@ const Login = () => {
 
         if (!password) {
             setSignInError('Please provide your password');
-            console.log(signInError);
+            notify();
             return;
         } else if (!email) {
             setSignInError('Please provide your Email');
-            console.log(signInError);
+            notify();
             return;
         } else {
             signInUser(email, password)
-                .then(() => setSignInError('login success'))
+                .then(() => {
+                    setSignInError('login success');
+                    notify();
+                    <Navigate to="/profile" />
+                })
                 .catch(error => {
                     setSignInError(error.message.slice(10, 50))
+                    notify();
                 })
-            console.log(signInError);
+            
         }
 
     }
     return (
         <div>
+            {
+                user?.email && <Navigate to='/'></Navigate>
+            }
             <section className="bg-gray-50 dark:bg-gray-900">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
@@ -71,12 +81,27 @@ const Login = () => {
                                 </div>
                                 <button type="submit" className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Login</button>
 
-                                <button onClick={() => googleSignIn()} className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex gap-3 justify-center items-center"><BsGoogle />Sign In with Google</button>
+                                <button onClick={() => {
+                                    googleSignIn()
+                                        .then(() => {
+                                            <Navigate to='/' />
+                                        })
+                                }} className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex gap-3 justify-center items-center"><BsGoogle />Sign In with Google</button>
 
                                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                     Don't have an account yet? <Link to='/register' className="font-medium text-primary-600 hover:underline">Register Now</Link>
                                 </p>
                             </form>
+                            <Toaster
+                                toastOptions={{
+                                    className: '',
+                                    style: {
+                                        border: '1px solid #713200',
+                                        padding: '16px',
+                                        color: '#713200',
+                                    },
+                                }}
+                            />
                         </div>
                     </div>
                 </div>

@@ -7,16 +7,16 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
-    // const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     // signUp new user
     const createUser = (email, password) => {
-        // setIsLoading(true);
+        setIsLoading(true);
         return createUserWithEmailAndPassword(auth, email, password);
     }
     // sign in user 
     const signInUser = (email, password) => {
-        // setIsLoading(true);
+        setIsLoading(true);
         return signInWithEmailAndPassword(auth, email, password);
     }
     // sign in with google
@@ -28,11 +28,11 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const subscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
-                // setIsLoading(false);
+                setIsLoading(false);
                 setUser(currentUser);
             } else {
                 // User is signed out
-                // setIsLoading(false);
+                setIsLoading(false);
             }
         });
 
@@ -44,6 +44,8 @@ const AuthProvider = ({ children }) => {
 
     const authInfo = {
         user,
+        setUser,
+        isLoading,
         createUser,
         signInUser,
         googleSignIn

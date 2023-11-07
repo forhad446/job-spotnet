@@ -7,9 +7,7 @@ import { RxAvatar } from 'react-icons/Rx';
 
 const Link = () => {
 
-    const { user } = useContext(AuthContext);
-    console.log(user);
-    const avatar = user?.photoURL;
+    const { user, setUser } = useContext(AuthContext);
     return (
         <>
             <li>
@@ -66,22 +64,22 @@ const Link = () => {
                 user?.email ? <>
                     <li>
                         <NavLink
-                            to='/register'
+                            to='/profile'
                             className={({ isActive, isPending }) =>
                                 isPending ? "pending" : isActive ? "text-red-400 underline" : ""
                             }
                         >
-                            {user?.displayName ? user?.displayName : 'Profile'}
+                            {user?.displayName ? user?.displayName : 'User Name'}
                         </NavLink>
                     </li>
                     <li className="hidden lg:block ">
                         <NavLink
-                            to='/login'
+                            to='/profile'
                             className={({ isActive, isPending }) =>
                                 isPending ? "pending" : isActive ? "text-red-400 underline" : ""
                             }
                         >
-                            {user?.email ? <img className="w-6 rounded-full" src={user?.photoURL} alt="" /> : <RxAvatar className=""/> }
+                            {user?.photoURL ? <img className="w-6 rounded-full" src={user?.photoURL} alt="" /> : <RxAvatar className=""/> }
                             
                             
                         </NavLink>
@@ -91,6 +89,7 @@ const Link = () => {
                             signOut(auth)
                                 .then(() => {
                                     console.log('Sign-out successful');
+                                    setUser(null);
                                 }).catch((error) => {
                                     console.log(error.message);
                                 });
