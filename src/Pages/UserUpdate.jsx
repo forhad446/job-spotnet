@@ -1,26 +1,34 @@
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
 import Swal from 'sweetalert2'
 import withReactContent from "sweetalert2-react-content";
+import { useParams } from "react-router-dom";
+
 
 const MySwal = withReactContent(Swal)
 const showSwalWithLink = () => {
     MySwal.fire({
         position: 'center',
         icon: 'success',
-        title: 'Posted Jobs added on database',
+        title: 'Jobs data updated success',
         showConfirmButton: false,
         timer: 1500
     })
 }
 
-const AddJob = () => {
+const UserUpdate = () => {
 
     const { user } = useContext(AuthContext);
-    // const notify = () => toast('signUpError');
+    const { id } = useParams()
+    const [job, setJob] = useState([]);
 
-    const handleAddJob = event => {
+    useEffect(() => {
+        axios.get(`http://localhost:5000/jobs/${id}`)
+            .then(res => { setJob(res.data[0]) })
+    }, [id])
+
+    const handleUpdateJob = event => {
         event.preventDefault();
         const form = event.target;
         const job_title = form.job_title.value;
@@ -32,24 +40,30 @@ const AddJob = () => {
         const description = form.description.value;
         const jobInfo = { job_title, email, job_type, deadline, minimum_price, maximum_price, description }
 
-        axios.post('http://localhost:5000/addJobs', jobInfo)
+        axios
+            .put(`http://localhost:5000/jobs/${id}`, jobInfo, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
             .then((response) => {
-                console.log(response);
-                showSwalWithLink();
-                location.href = '/myPostedJob';
+                showSwalWithLink()
+                setTimeout(() => {
+                    window.location.href = "/myPostedJob";
+                }, 1000)
             })
             .catch((error) => {
-                console.log(error);
+                console.error(error);
             });
     }
     return (
         <div className="max-w-7xl mx-auto my-10">
-            <form onSubmit={handleAddJob}>
+            <form onSubmit={handleUpdateJob}>
                 <h1 className="text-2xl mb-2">Post new job</h1>
                 <div className="job-info border-b-2 py-2 mb-5">
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm mb-2">Title</label>
-                        <input className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" type="text" name="job_title" placeholder="Frontend Developer" autoFocus />
+                        <input className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" type="text" name="job_title" placeholder={job.job_title} autoFocus />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm mb-2">Email</label>
@@ -75,7 +89,7 @@ const AddJob = () => {
                         {/* Location */}
                         <div className="w-full md:w-6/12 mb-4 md:mb-0">
                             <label className="block text-gray-700 text-sm mb-2">Deadline</label>
-                            <input type="date" className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" id="location" name="deadline" placeholder="Schwerin" />
+                            <input type="date" className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" id="location" name="deadline" placeholder={job.deadline} />
 
 
                         </div>
@@ -87,13 +101,13 @@ const AddJob = () => {
                         {/* minimum_price */}
                         <div className="w-full md:w-1/2 px-3 mb-4 md:mb-0">
                             <label className="block text-gray-700 text-sm mb-2">Minimum price</label>
-                            <input type="text" className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" name="minimum_price" placeholder="minimum_price" />
+                            <input type="text" className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" name="minimum_price" placeholder={job.minimum_price} />
                         </div>
 
                         {/* Maximum price */}
                         <div className="w-full md:w-1/2 px-3 mb-4 md:mb-0">
                             <label className="block text-gray-700 text-sm mb-2">Maximum price</label>
-                            <input type="text" className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" name="maximum_price" placeholder="maximum_price" />
+                            <input type="text" className="appearance-none block w-full bg-white text-gray-700 border border-gray-400 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" name="maximum_price" placeholder={job.maximum_price} />
                         </div>
                     </div>
                     {/* end group */}
@@ -101,7 +115,7 @@ const AddJob = () => {
                     {/* Description */}
                     <div>
                         <label className="block text-gray-700 text-sm mb-2">Description</label>
-                        <textarea className="border border-gray-400" name="description" id="description" cols="55" rows="4"></textarea>
+                        <textarea className="border border-gray-400" placeholder={job.description} name="description" id="description" cols="55" rows="4"></textarea>
                     </div>
 
 
@@ -110,11 +124,11 @@ const AddJob = () => {
 
                 {/* Submit */}
                 <div>
-                    <button className="font-semibold tracking-wider transition-colors duration-200 bg-[#FF3811] text-white rounded-md px-6 py-4 hover:bg-green-700" type="submit">Create job</button>
+                    <button className="font-semibold tracking-wider transition-colors duration-200 bg-[#FF3811] text-white rounded-md px-6 py-4 hover:bg-green-700" type="submit">Update job</button>
                 </div>
             </form>
         </div>
     );
 };
 
-export default AddJob;
+export default UserUpdate;

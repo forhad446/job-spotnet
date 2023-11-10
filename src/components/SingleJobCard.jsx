@@ -1,16 +1,28 @@
 import axios from "axios";
-import { useContext } from "react";
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
+import withReactContent from "sweetalert2-react-content";
+
+
+const MySwal = withReactContent(Swal)
+const showSwalWithLink = () => {
+    MySwal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'data deleted success',
+        showConfirmButton: false,
+        timer: 1500
+    })
+}
 
 const SingleJobCard = ({ item, handleRefresh }) => {
     const { _id, deadline, description, email, job_title, job_type, maximum_price, minimum_price } = item;
-    
 
-    // const http://localhost:5000/jobsDelete/654bd4d6e8cf407d52db947f
     const handleDelete = (id) => {
         axios.delete(`http://localhost:5000/jobs/${id}`)
             .then(() => {
                 handleRefresh()
+                showSwalWithLink()
             })
     }
 
@@ -32,11 +44,11 @@ const SingleJobCard = ({ item, handleRefresh }) => {
                 </div>
                 <div className="my-4">
                     <div className="flex space-x-1 items-center">
-                        <p>Deadline : {deadline}</p>
+                        <p>Deadline : <span className="font-bold">{deadline}</span></p>
                     </div>
                     <div className="flex justify-between items-center my-2">
-                        <p>Min Price : {minimum_price}</p>
-                        <p>Max Price : {maximum_price}</p>
+                        <p>Min Price : <span className="font-bold">{minimum_price}</span></p>
+                        <p>Max Price : <span className="font-bold">{maximum_price}</span></p>
                     </div>
                     <div className="flex space-x-1 items-center">
                         <p>
@@ -44,7 +56,7 @@ const SingleJobCard = ({ item, handleRefresh }) => {
                         </p>
                     </div>
                     <div className="flex justify-between mt-4">
-                        <Link to={'user'}>
+                        <Link to={`/user_update/${_id}`}>
                             <button className=" font-semibold tracking-wider transition-colors duration-200 bg-[#FF3811] text-white px-6 py-2 hover:bg-green-700 rounded-xl shadow-lg">Update Now</button>
                         </Link>
                         <Link>
