@@ -43,12 +43,12 @@ const Routes = createBrowserRouter([
                 element: <PrivateRoute><BidsRequest /></PrivateRoute>
             },
             {
-                path: '/:id',
+                path: '/myPostedJob/:id',
                 element: <PrivateRoute><JobDetails /></PrivateRoute>
             },
             {
                 path: '/user_update/:id',
-                element: <UserUpdate></UserUpdate>
+                element: <PrivateRoute><UserUpdate /></PrivateRoute>
             }
         ]
     },

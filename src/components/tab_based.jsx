@@ -1,6 +1,8 @@
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import Card from '../Shared/card';
+import WebDevelopment from './WebDevelopment';
+import DigitalMarketing from './DigitalMarketing';
+import GraphicsDesign from './GraphicsDesign';
 
 const TabBased = () => (
     <Tabs>
@@ -11,16 +13,13 @@ const TabBased = () => (
         </TabList>
 
         <TabPanel>
-            <h2>card 1</h2>
-            <Card></Card>
+            <WebDevelopment></WebDevelopment>
         </TabPanel>
         <TabPanel>
-            <h2>card 2</h2>
-            <Card></Card>
+            <DigitalMarketing></DigitalMarketing>
         </TabPanel>
         <TabPanel>
-            <h2>card 3</h2>
-            <Card></Card>
+            <GraphicsDesign />
         </TabPanel>
     </Tabs>
 );
