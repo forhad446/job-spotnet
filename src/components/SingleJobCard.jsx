@@ -1,11 +1,20 @@
+import axios from "axios";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
-const SingleJobCard = ({ item }) => {
-console.log(item);
+const SingleJobCard = ({ item, handleRefresh }) => {
     const { _id, deadline, description, email, job_title, job_type, maximum_price, minimum_price } = item;
-
     
+
+    // const http://localhost:5000/jobsDelete/654bd4d6e8cf407d52db947f
+    const handleDelete = (id) => {
+        axios.delete(`http://localhost:5000/jobs/${id}`)
+            .then(() => {
+                handleRefresh()
+            })
+    }
+
+
     return (
         <div className="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500">
             <div className="relative">
@@ -38,8 +47,8 @@ console.log(item);
                         <Link to={'user'}>
                             <button className=" font-semibold tracking-wider transition-colors duration-200 bg-[#FF3811] text-white px-6 py-2 hover:bg-green-700 rounded-xl shadow-lg">Update Now</button>
                         </Link>
-                        <Link to={'user'}>
-                            <button className=" font-semibold tracking-wider transition-colors duration-200 bg-[#FF3811] text-white px-6 py-2 hover:bg-green-700 rounded-xl shadow-lg">Delete Now</button>
+                        <Link>
+                            <button onClick={() => handleDelete(_id)} className=" font-semibold tracking-wider transition-colors duration-200 bg-[#FF3811] text-white px-6 py-2 hover:bg-green-700 rounded-xl shadow-lg">Delete Now</button>
                         </Link>
                     </div>
                 </div>

@@ -2,14 +2,22 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SingleJobCard from "../components/SingleJobCard";
+import { useContext } from "react";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const MyPostedJob = () => {
     const [jobs, setJobs] = useState([]);
+    const [refresh, setRefresh] = useState(true);
+    const { user } = useContext(AuthContext);
+
+    const handleRefresh = () => {
+        setRefresh(!refresh)
+    }
 
     useEffect(() => {
-        axios.get('http://localhost:5000/jobs')
+        axios.get(`http://localhost:5000/jobs?email=${user?.email}`)
             .then(res => setJobs(res.data))
-    }, [])
+    }, [refresh, user])
     return (
         <div className="max-w-7xl mx-auto my-10">
             <div>
@@ -24,6 +32,7 @@ const MyPostedJob = () => {
                             jobs.map(item => <SingleJobCard
                                 key={item._id}
                                 item={item}
+                                handleRefresh={handleRefresh}
                             ></SingleJobCard>)
                         }
                     </div>
