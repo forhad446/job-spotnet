@@ -24,7 +24,7 @@ const UserUpdate = () => {
     const [job, setJob] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/jobs/${id}`)
+        axios.get(`https://job-spotnet-server.vercel.app/jobs/${id}`)
             .then(res => { setJob(res.data[0]) })
     }, [id])
 
@@ -41,7 +41,7 @@ const UserUpdate = () => {
         const jobInfo = { job_title, email, job_type, deadline, minimum_price, maximum_price, description }
 
         axios
-            .put(`http://localhost:5000/jobs/${id}`, jobInfo, {
+            .put(`https://job-spotnet-server.vercel.app/jobs/${id}`, jobInfo, {
                 headers: {
                     "Content-Type": "application/json",
                 },

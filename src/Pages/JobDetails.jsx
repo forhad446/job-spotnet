@@ -14,7 +14,7 @@ const showSwalWithLink = () => {
     MySwal.fire({
         position: 'center',
         icon: 'success',
-        title: 'Posted Jobs added on database',
+        title: 'Successfully bid on the job',
         showConfirmButton: false,
         timer: 1500
     })
@@ -34,35 +34,34 @@ const JobDetails = () => {
         const yourEmail = form.email.value;
         const deadline = form.deadline.value;
         const price = form.price.value;
+        const status = 'pending';
+        const job_title = jobs[0]?.job_title;
 
-        const bidInfo = { buyerEmail, yourEmail, deadline, price }
-        console.log(bidInfo);
+        const bidInfo = { job_title, buyerEmail, yourEmail, deadline, price, status }
 
-        // axios.post('http://localhost:5000/addJobs', jobInfo)
-        //     .then((response) => {
-        //         console.log(response);
-        //         showSwalWithLink();
-        //         location.href = '/myPostedJob';
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
+        axios.post('https://job-spotnet-server.vercel.app/bidJobs', bidInfo)
+            .then((response) => {
+                console.log(response);
+                showSwalWithLink();
+                location.href = '/myBids';
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/jobs/${id}`)
+        axios.get(`https://job-spotnet-server.vercel.app/jobs/${id}`)
             .then(res => setJobs(res.data))
-    }, [])
+    }, [id])
     return (
         <div className="max-w-7xl mx-auto my-10">
             <div className="flex justify-between items-center gap-5">
                 {
                     jobs.map(item =>
                         <div key={item._id} className="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500">
-                            <h3 className="mb-3 text-xl font-bold text-indigo-600">Beginner Friendly</h3>
                             <div className="relative">
                                 <img className="w-full rounded-xl" src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" alt="Colors" />
-                                <p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">NEW</p>
                             </div>
                             <h1 className="mt-4 text-gray-800 text-2xl font-bold cursor-pointer">
                                 {item?.job_title}

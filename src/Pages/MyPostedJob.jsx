@@ -15,7 +15,7 @@ const MyPostedJob = () => {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/jobs?email=${user?.email}`)
+        axios.get(`https://job-spotnet-server.vercel.app/jobs?email=${user?.email}`)
             .then(res => setJobs(res.data))
     }, [refresh, user])
     return (

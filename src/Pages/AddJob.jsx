@@ -32,7 +32,7 @@ const AddJob = () => {
         const description = form.description.value;
         const jobInfo = { job_title, email, job_type, deadline, minimum_price, maximum_price, description }
 
-        axios.post('http://localhost:5000/addJobs', jobInfo)
+        axios.post('https://job-spotnet-server.vercel.app/addJobs', jobInfo)
             .then((response) => {
                 console.log(response);
                 showSwalWithLink();

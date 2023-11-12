@@ -17,7 +17,7 @@ const GraphicsDesign = () => {
     // }
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/jobs`)
+        axios.get(`https://job-spotnet-server.vercel.app/jobs`)
             .then(res => setJobs(res.data))
     }, [])
 
@@ -29,7 +29,7 @@ const GraphicsDesign = () => {
                     {
                         graphics.map(item =>
                             <div key={item._id} className="max-w-sm bg-white px-6 pt-6 pb-2 rounded-xl shadow-lg transform hover:scale-105 transition duration-500">
-                                <h3 className="mb-3 text-xl font-bold text-indigo-600">Beginner Friendly</h3>
+                                <h3 className="mb-3 text-xl font-bold text-indigo-600">{item?.job_type}</h3>
                                 <div className="relative">
                                     <img className="w-full rounded-xl" src={banner} alt="Colors" />
                                     <p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">NEW</p>
@@ -58,7 +58,7 @@ const GraphicsDesign = () => {
                                             {item.description}
                                         </p>
                                     </div>
-                                    <Link to={'user'}>
+                                    <Link to={`/myPostedJob/${item._id}`}>
                                         <button className="mt-4 text-xl w-full text-white bg-indigo-600 py-2 rounded-xl shadow-lg">Bid Now</button>
                                     </Link>
                                 </div>

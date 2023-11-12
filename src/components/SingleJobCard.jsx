@@ -19,7 +19,7 @@ const SingleJobCard = ({ item, handleRefresh }) => {
     const { _id, deadline, description, email, job_title, job_type, maximum_price, minimum_price } = item;
 
     const handleDelete = (id) => {
-        axios.delete(`http://localhost:5000/jobs/${id}`)
+        axios.delete(`https://job-spotnet-server.vercel.app/jobs/${id}`)
             .then(() => {
                 handleRefresh()
                 showSwalWithLink()
